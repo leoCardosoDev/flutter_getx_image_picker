@@ -18,7 +18,7 @@ class HomeView extends StatelessWidget {
             ),
             body: Padding(
               padding: EdgeInsets.only(top: 16),
-              child: SingleChildScrollView(
+              child: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -29,8 +29,10 @@ class HomeView extends StatelessWidget {
                               "Select image from camera/gallery",
                               style: TextStyle(fontSize: 20),
                             )
-                          : Image.file(
-                              File(controller.selectedImagePath.value)),
+                          : Expanded(
+                              child: Image.file(
+                                  File(controller.selectedImagePath.value)),
+                            ),
                     ),
                     SizedBox(height: 10),
                     Obx(() => Text(controller.selectedImageSize.value == ''
@@ -48,11 +50,23 @@ class HomeView extends StatelessWidget {
                       },
                       child: Text("Galeria"),
                     ),
+                    SizedBox(height: 10),
+                    Obx(() => controller.selectedImagePath.value == ''
+                        ? _saveButton(onPressed: null)
+                        : _saveButton(onPressed: controller.uploadFiles)),
                   ],
                 ),
               ),
             ),
           );
         });
+  }
+
+  Widget _saveButton({Function onPressed}) {
+    return RaisedButton(
+        color: Colors.pink,
+        textColor: Colors.white,
+        onPressed: onPressed,
+        child: Text("Save"));
   }
 }
