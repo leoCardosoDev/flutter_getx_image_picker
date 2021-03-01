@@ -32,11 +32,11 @@ class HomeController extends GetxController {
   void uploadFiles() {
     if (selectedImagePath.value != '') {
       Future<String> url = AwsS3.uploadFile(
-          accessKey: "AKIA6I45Q7GAZT73T57F",
-          secretKey: "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",
+          accessKey: "XXXXXXXXXXXXXXXXXXXXXXXXX",
+          secretKey: "xxxxxxxxxxxxxxx",
           file: File(selectedImagePath.value),
-          destDir: "/uploads/9926",
-          bucket: "flutterbucketleo",
+          destDir: "xxxxxxxxxxxxx",
+          bucket: "xxxxxxxxxxxxxxxxxxxx",
           region: "us-east-1");
       print("Retorno do S3 = ${url.toString()}");
     }

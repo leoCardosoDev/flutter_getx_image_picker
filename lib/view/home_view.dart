@@ -18,43 +18,45 @@ class HomeView extends StatelessWidget {
             ),
             body: Padding(
               padding: EdgeInsets.only(top: 16),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () => controller.selectedImagePath.value == ''
-                          ? Text(
-                              "Select image from camera/gallery",
-                              style: TextStyle(fontSize: 20),
-                            )
-                          : Expanded(
-                              child: Image.file(
-                                  File(controller.selectedImagePath.value)),
-                            ),
-                    ),
-                    SizedBox(height: 10),
-                    Obx(() => Text(controller.selectedImageSize.value == ''
-                        ? ''
-                        : controller.selectedImageSize.value)),
-                    RaisedButton(
-                      onPressed: () {
-                        controller.getImage(ImageSource.camera);
-                      },
-                      child: Text("Camera"),
-                    ),
-                    RaisedButton(
-                      onPressed: () {
-                        controller.getImage(ImageSource.gallery);
-                      },
-                      child: Text("Galeria"),
-                    ),
-                    SizedBox(height: 10),
-                    Obx(() => controller.selectedImagePath.value == ''
-                        ? _saveButton(onPressed: null)
-                        : _saveButton(onPressed: controller.uploadFiles)),
-                  ],
+              child: Center(
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(
+                        () => controller.selectedImagePath.value == ''
+                            ? Text(
+                                "Selecionar imagem da camera ou galeria: ",
+                                style: TextStyle(fontSize: 20),
+                              )
+                            : Expanded(
+                                child: Image.file(
+                                    File(controller.selectedImagePath.value)),
+                              ),
+                      ),
+                      SizedBox(height: 10),
+                      Obx(() => Text(controller.selectedImageSize.value == ''
+                          ? ''
+                          : controller.selectedImageSize.value)),
+                      RaisedButton(
+                        onPressed: () {
+                          controller.getImage(ImageSource.camera);
+                        },
+                        child: Text("Camera"),
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          controller.getImage(ImageSource.gallery);
+                        },
+                        child: Text("Galeria"),
+                      ),
+                      SizedBox(height: 10),
+                      Obx(() => controller.selectedImagePath.value == ''
+                          ? _saveButton(onPressed: null)
+                          : _saveButton(onPressed: controller.uploadFiles)),
+                    ],
+                  ),
                 ),
               ),
             ),
