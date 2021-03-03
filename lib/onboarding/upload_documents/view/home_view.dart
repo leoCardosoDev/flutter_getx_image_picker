@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getx_upload/controller/home_controller.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:getx_upload/onboarding/upload_documents/controller/home_controller.dart';
 
 class HomeView extends StatelessWidget {
   @override
@@ -13,8 +14,20 @@ class HomeView extends StatelessWidget {
         builder: (HomeController controller) {
           return Scaffold(
             appBar: AppBar(
-              title: Text("Home View"),
+              backgroundColor: Colors.white,
+              title: Text(
+                "Passo 7 de 8",
+                style: TextStyle(color: Colors.black),
+              ),
               centerTitle: true,
+              elevation: 1,
+              leading: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.black,
+                ),
+              ),
             ),
             body: Padding(
               padding: EdgeInsets.only(top: 16),
