@@ -9,6 +9,7 @@ import 'package:getx_upload/utils/upload_utils/aws_s3_upload.dart';
 class HomeController extends GetxController {
   RxString selectedImagePath = ''.obs;
   RxString selectedImageSize = ''.obs;
+  List<RxBool> nextStep = [true.obs, false.obs, false.obs];
   List<RxBool> allSteps = [false.obs, false.obs, false.obs];
 
   void getImage(ImageSource imageSource) async {

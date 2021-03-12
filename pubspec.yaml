@@ -35,6 +35,7 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   amazon_cognito_identity_dart_2: ^0.1.25
   http: ^0.12.0+2
+  file_picker: ^2.1.5+1
 
 
 dev_dependencies:

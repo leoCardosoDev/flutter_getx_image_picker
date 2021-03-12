@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:getx_upload/onboarding/upload_documents/controller/home_controller.dart';
-import 'package:getx_upload/onboarding/upload_documents/view/selfie_explanation_view.dart';
+import 'package:getx_upload/onboarding/upload_documents/view/steps_explanation_view.dart';
 
 class DocumentsView extends StatelessWidget {
   @override
@@ -29,22 +29,22 @@ class DocumentsView extends StatelessWidget {
       Image.asset('images/ic_upload/icon_comprovante_ativo@2x.png'),
     ];
 
-    Widget _iconCircle({int index}) {
-      return Icon(
-        index == 0 ? FontAwesomeIcons.solidCircle : FontAwesomeIcons.circle,
-        size: 35,
-        color: Colors.grey,
-      );
-    }
-
-    Widget _iconCircleOk({int index}) {
-      return Icon(
-        index == 0
-            ? FontAwesomeIcons.solidCheckCircle
-            : FontAwesomeIcons.circle,
-        size: 35,
-        color: Color(0xFF0CB3FF),
-      );
+    Widget _iconCircle({int index, HomeController controller, Color color}) {
+      return Obx(() => controller.allSteps[index].value == false
+          ? Icon(
+              controller.nextStep[index].value == true
+                  ? FontAwesomeIcons.solidCircle
+                  : FontAwesomeIcons.circle,
+              size: 35,
+              color: color,
+            )
+          : Icon(
+              controller.nextStep[index].value == true
+                  ? FontAwesomeIcons.solidCheckCircle
+                  : FontAwesomeIcons.circle,
+              size: 35,
+              color: color,
+            ));
     }
 
     Widget _verticalDivider({Color color}) {
@@ -116,13 +116,19 @@ class DocumentsView extends StatelessWidget {
             children: <Widget>[
               Obx(
                 () => controller.allSteps[index].value == false
-                    ? _iconCircle(index: index)
-                    : _iconCircleOk(index: index),
+                    ? _iconCircle(
+                        index: index,
+                        controller: controller,
+                        color: Colors.grey)
+                    : _iconCircle(
+                        index: index,
+                        controller: controller,
+                        color: Color(0xFF0CB3FF)),
               ),
               index == values.length - 1
                   ? Container()
                   : Container(
-                      height: 90,
+                      height: 100,
                       alignment: Alignment.center,
                       child: Obx(() => controller.allSteps[index].value == false
                           ? _verticalDivider(color: Colors.grey)
