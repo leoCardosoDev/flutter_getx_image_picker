@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+import 'package:getx_upload/onboarding/upload_documents/view/selfie_choose_view.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:getx_upload/utils/upload_utils/aws_s3_upload.dart';
 
 class HomeController extends GetxController {
-  var selectedImagePath = ''.obs;
-  var selectedImageSize = ''.obs;
+  RxString selectedImagePath = ''.obs;
+  RxString selectedImageSize = ''.obs;
+  List<RxBool> allSteps = [false.obs, false.obs, false.obs];
 
   void getImage(ImageSource imageSource) async {
     PickedFile pickedFile = await ImagePicker().getImage(source: imageSource);
@@ -19,27 +19,27 @@ class HomeController extends GetxController {
           ((File(selectedImagePath.value)).lengthSync() / 1024 / 1024)
                   .toStringAsFixed(2) +
               " Mb";
-    } else {
-      Get.snackbar(
-        'Error',
-        'No image selected',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      Get.off(() => SelfieChooseView());
     }
   }
 
-  void uploadFiles() {
+  Future<void> uploadFiles() async {
     if (selectedImagePath.value != '') {
-      Future<String> url = AwsS3.uploadFile(
-          accessKey: "XXXXXXXXXXXXXXXXXXXXXXXXX",
-          secretKey: "xxxxxxxxxxxxxxx",
+      String url = await AwsS3.uploadFile(
+          accessKey: "XXXXXXXXXXXXXXXXXXXXXXXX",
+          secretKey: "XXXXXXXXXXXXXXX",
           file: File(selectedImagePath.value),
-          destDir: "xxxxxxxxxxxxx",
-          bucket: "xxxxxxxxxxxxxxxxxxxx",
-          region: "us-east-1");
-      print("Retorno do S3 = ${url.toString()}");
+          destDir: "xxxxx",
+          bucket: "xxxxxxxxx",
+          region: "xx-xx-x");
+
+      if (url != "error") {
+        allSteps[0].value = true;
+        Get.back();
+      } else {
+        allSteps[0].value = false;
+        Get.back();
+      }
     }
   }
 

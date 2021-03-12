@@ -36,7 +36,8 @@ class SelfieChooseView extends StatelessWidget {
                           ? Expanded(
                               child: Text(
                                 "Selecionar imagem da camera ou galeria: ",
-                                style: TextStyle(fontSize: 20),
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
                               ),
                             )
                           : Expanded(

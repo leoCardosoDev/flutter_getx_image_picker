@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:getx_upload/onboarding/upload_documents/controller/home_controller.dart';
 import 'package:getx_upload/onboarding/upload_documents/view/selfie_explanation_view.dart';
 
 class DocumentsView extends StatelessWidget {
@@ -15,13 +17,45 @@ class DocumentsView extends StatelessWidget {
       'Comprovante de residência'
     ];
 
-    List<Icon> icons = [
-      Icon(Icons.backspace),
-      Icon(Icons.beenhere),
-      Icon(Icons.folder)
+    List<Image> iconsInactive = [
+      Image.asset('images/ic_upload/icon_selfie_inativo@2x.png'),
+      Image.asset('images/ic_upload/icon_documentos_inativo@2x.png'),
+      Image.asset('images/ic_upload/icon_comprovante_inativo@2x.png'),
     ];
 
-    buildTopicTitle({String text}) {
+    List<Image> iconsActive = [
+      Image.asset('images/ic_upload/icon_selfie_ativo.png'),
+      Image.asset('images/ic_upload/icon_documentos_ativo@2x.png'),
+      Image.asset('images/ic_upload/icon_comprovante_ativo@2x.png'),
+    ];
+
+    Widget _iconCircle({int index}) {
+      return Icon(
+        index == 0 ? FontAwesomeIcons.solidCircle : FontAwesomeIcons.circle,
+        size: 35,
+        color: Colors.grey,
+      );
+    }
+
+    Widget _iconCircleOk({int index}) {
+      return Icon(
+        index == 0
+            ? FontAwesomeIcons.solidCheckCircle
+            : FontAwesomeIcons.circle,
+        size: 35,
+        color: Color(0xFF0CB3FF),
+      );
+    }
+
+    Widget _verticalDivider({Color color}) {
+      return VerticalDivider(
+        color: color,
+        thickness: 2,
+        width: 20,
+      );
+    }
+
+    _buildTopicTitle({String text}) {
       return Container(
         alignment: Alignment.centerLeft,
         margin: EdgeInsets.only(top: 3),
@@ -40,7 +74,8 @@ class DocumentsView extends StatelessWidget {
       );
     }
 
-    buildProgress({String title, int index, int value}) {
+    Widget _buildProgress(
+        {String title, int index, int value, HomeController controller}) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -49,16 +84,18 @@ class DocumentsView extends StatelessWidget {
               Container(
                 child: Center(
                   child: Container(
-                    height: 30,
-                    width: 30,
-                    child: icons[index],
+                    height: 55,
+                    width: 55,
+                    child: Obx(() => controller.allSteps[index].value == false
+                        ? iconsInactive[index]
+                        : iconsActive[index]),
                   ),
                 ),
               ),
               index == values.length - 1
                   ? Container()
                   : Container(
-                      height: 110,
+                      height: 80,
                       alignment: Alignment.center,
                       child: Container(),
                     ),
@@ -66,31 +103,30 @@ class DocumentsView extends StatelessWidget {
           ),
           Flexible(
             child: Container(
-              margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+              margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  buildTopicTitle(text: title),
+                  _buildTopicTitle(text: title),
                 ],
               ),
             ),
           ),
           Column(
             children: <Widget>[
-              Icon(
-                Icons.circle,
-                size: 40,
-                color: Colors.grey,
+              Obx(
+                () => controller.allSteps[index].value == false
+                    ? _iconCircle(index: index)
+                    : _iconCircleOk(index: index),
               ),
               index == values.length - 1
                   ? Container()
                   : Container(
                       height: 90,
                       alignment: Alignment.center,
-                      child: VerticalDivider(
-                        thickness: 2,
-                        width: 20,
-                      ),
+                      child: Obx(() => controller.allSteps[index].value == false
+                          ? _verticalDivider(color: Colors.grey)
+                          : _verticalDivider(color: Color(0xFF0CB3FF))),
                     ),
             ],
           ),
@@ -98,87 +134,90 @@ class DocumentsView extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Passo 7 de 8",
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: _primaryColor,
-                  maxRadius: 12,
-                  child: Container(
-                    child: Text(
-                      '7',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+    return GetBuilder<HomeController>(
+        init: HomeController(),
+        builder: (HomeController controller) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              title: Text(
+                "Passo 7 de 8",
+                style: TextStyle(color: Colors.black),
+              ),
+              centerTitle: true,
+              elevation: 1,
+              leading: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.black,
                 ),
-                SizedBox(width: 10),
-                Text(
-                  'Documentos',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: _primaryColor,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-                'Precisamos que você tire uma selfie e nos envie uma foto ou cópia digitalizada dos documentos:'),
-            SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                  padding: EdgeInsets.fromLTRB(15, 40, 15, 40),
-                  itemCount: values.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    print("$index");
-                    return buildProgress(
-                        title: '${titles[values[index]]}',
-                        index: index,
-                        value: values[index]);
-                  }),
-            ),
-            Container(
-              width: double.infinity,
-              height: 85,
-              padding: EdgeInsets.all(20),
-              child: RaisedButton(
-                onPressed: () {
-                  Get.to(SelfieExplanationView(),
-                      transition: Transition.fadeIn);
-                },
-                color: _primaryColor,
-                child: Text("Começar"),
               ),
             ),
-            SizedBox(height: 20)
-          ],
-        ),
-      ),
-    );
+            body: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: _primaryColor,
+                        maxRadius: 12,
+                        child: Container(
+                          child: Text(
+                            '7',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Documentos',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: _primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                      'Precisamos que você tire uma selfie e nos envie uma foto ou cópia digitalizada dos documentos:'),
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.builder(
+                        padding: EdgeInsets.fromLTRB(15, 40, 15, 40),
+                        itemCount: values.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _buildProgress(
+                              title: '${titles[values[index]]}',
+                              index: index,
+                              value: values[index],
+                              controller: controller);
+                        }),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 85,
+                    padding: EdgeInsets.all(20),
+                    child: RaisedButton(
+                      onPressed: () {
+                        Get.to(() => SelfieExplanationView());
+                      },
+                      color: _primaryColor,
+                      child: Text("Começar"),
+                    ),
+                  ),
+                  SizedBox(height: 20)
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
